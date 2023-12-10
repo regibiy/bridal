@@ -26,29 +26,25 @@ include_once("templates/header.php");
           <option value="0" selected hidden>Silakan Pilih Jasa</option>
           <?php
           $result = $conn->query("SELECT * FROM tbl_jenis_jasa");
-
-          while ($row = $data = $result->fetch_assoc()) {
+          while ($row = $result->fetch_assoc()) {
             echo "<option value='" . $row["id"] . "'>" . $row["nama_jasa"] . "</option>";
           }
           ?>
         </select>
         <!-- muncul select atau input -->
       </div>
-
       <div class="form-group">
         <label class="fw-bold" for="qty">Qty</label>
         <input class="form-control" type="number" name="qty" id="qty" placeholder="Qty">
       </div>
-
       <div class="form-group">
         <label class="fw-bold" for="harga">Harga</label>
         <input class="form-control" type="number" name="harga" placeholder="Harga">
       </div>
-
-      <!-- <div class="form-group">
+      <div class="form-group">
         <label class="fw-bold" for="gambar">Gambar</label>
         <input class="form-control" type="file" name="gambar">
-      </div> -->
+      </div>
       <div class="form-group">
         <button class="btn btn-primary btn-block" name="tambah_jasa" type="submit">Tambah</button>
       </div>

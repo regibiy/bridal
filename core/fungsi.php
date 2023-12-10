@@ -16,7 +16,7 @@ function alert_with_redirect($msg, $url)
     ";
 }
 
-function upload_image($file_name, $file_size, $temp_loc, $target_loc)
+function unggah_gambar($file_name, $file_size, $temp_loc, $target_loc)
 {
     $valid_ext = ['jpg', 'jpeg', 'png'];
     $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));

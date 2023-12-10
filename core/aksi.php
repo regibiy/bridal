@@ -63,12 +63,16 @@ if (isset($_POST["tambah_jasa"])) {
     $id_detail_jasa_2 = $kode[0];
     $qty = $conn->real_escape_string($_POST["qty"]);
     $harga = $conn->real_escape_string($_POST["harga"]);
-
-    $sql = "INSERT INTO tbl_jasa (id, id_jenis_jasa, id_detail_jasa, qty, harga) VALUES ('$id_jasa', '$id_jenis_jasa', '$id_detail_jasa_2', '$qty', '$harga')";
-    $conn->query($sql);
-    if ($conn->affected_rows > 0) {
-        alert_with_redirect("Data Jasa Berhasil Ditambahkan!", "../tambah_jasa.php");
+    $gambar = unggah_gambar($_FILES["gambar"]["name"], $_FILES["gambar"]["size"], $_FILES["gambar"]["tmp_name"], "../assets/upload_img/");
+    if ($gambar) {
+        $sql = "INSERT INTO tbl_jasa (id, id_jenis_jasa, id_detail_jasa, qty, harga, gambar) VALUES ('$id_jasa', '$id_jenis_jasa', '$id_detail_jasa_2', '$qty', '$harga', '$gambar')";
+        $conn->query($sql);
+        if ($conn->affected_rows > 0) {
+            alert_with_redirect("Data Jasa Berhasil Ditambahkan!", "../tambah_jasa.php");
+        } else {
+            alert_with_redirect("Data Jasa Gagal Ditambahkan!", "../tambah_jasa.php");
+        }
     } else {
-        alert_with_redirect("Data Jasa Gagal Ditambahkan!", "../tambah_jasa.php");
+        alert_with_redirect("Gambar harus berformat .jpg, .jpeg, .png, dengan ukuran kurang dari 3MB", "../tambah_jasa.php");
     }
 }
