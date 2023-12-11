@@ -27,7 +27,7 @@ include_once("templates/header.php");
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Gaun'>";
       echo "<p class='fw-bold'>Qty: " . $row["qty"] . "</p>";
       echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
-      echo "<a href='form_sewa.php' class='btn fw-bold'>Sewa</a>";
+      echo "<a href='form_sewa.php?idjasa=" . $row["id"] . "' class='btn fw-bold'>Sewa</a>";
       echo "</div>";
     }
     ?>
@@ -42,7 +42,7 @@ include_once("templates/header.php");
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Pakaian Adat'>";
       echo "<p class='fw-bold'>Qty: " . $row["qty"] . "</p>";
       echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
-      echo "<a href='form_sewa.php' class='btn fw-bold'>Sewa</a>";
+      echo "<a href='form_sewa.php?idjasa=" . $row["id"] . "' class='btn fw-bold'>Sewa</a>";
       echo "</div>";
     }
     ?>
@@ -57,7 +57,7 @@ include_once("templates/header.php");
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Pakaian Nikah'>";
       echo "<p class='fw-bold'>Qty: " . $row["qty"] . "</p>";
       echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
-      echo "<a href='form_sewa.php' class='btn fw-bold'>Sewa</a>";
+      echo "<a href='form_sewa.php?idjasa=" . $row["id"] . "' class='btn fw-bold'>Sewa</a>";
       echo "</div>";
     }
     ?>

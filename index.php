@@ -1,6 +1,6 @@
 <?php
 $data = [
-  "judul" => "Masuk",
+  "judul" => "Beranda",
   "penanda_beranda" => "active",
   "penanda_tambah_jasa" => "",
   "penanda_pengembalian" => "",
@@ -11,7 +11,7 @@ $data = [
 include_once("core/aksi.php");
 include_once("templates/header.php");
 ?>
-<!-- Navbar -->
+
 <header class="masthead">
   <div class="container">
     <div>

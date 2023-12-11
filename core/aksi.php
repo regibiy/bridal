@@ -76,3 +76,28 @@ if (isset($_POST["tambah_jasa"])) {
         alert_with_redirect("Gambar harus berformat .jpg, .jpeg, .png, dengan ukuran kurang dari 3MB", "../tambah_jasa.php");
     }
 }
+
+if (isset($_POST["tambah_sewa"])) {
+    $nama = $conn->real_escape_string($_POST["nama"]);
+    $alamat = $conn->real_escape_string($_POST["alamat"]);
+    $no_hp = $conn->real_escape_string($_POST["no_hp"]);
+    $tanggal_sewa = $conn->real_escape_string($_POST["tanggal_sewa"]);
+    $lama_sewa = $conn->real_escape_string($_POST["lama_sewa"]);
+    $nama_jasa = $conn->real_escape_string($_POST["id_nama_jasa"]);
+    $kode_jasa = $conn->real_escape_string($_POST["kode_jasa"]);
+    $harga_sewa = $conn->real_escape_string($_POST["harga"]);
+    $metode_bayar = $conn->real_escape_string($_POST["metode_bayar"]);
+
+    //format A-Z9999
+    $result = $conn->query("SELECT MAX(id) AS max_val FROM tbl_penyewaan");
+    $data = $result->fetch_assoc();
+    if ($data["max_val"] != null) {
+        $counter = substr($data["max_value"], 1);
+        var_dump($counter);
+    } else {
+        $counter_final = "A0001";
+        var_dump($counter_final);
+    }
+    $tanggal = date("Y-m-d");
+    $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, lama_sewa, nama_jasa, kode_jasa, harga_sewa, metode_bayar) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$lama_sewa', '$nama_jasa', '$kode_jasa', '$harga_sewa', '$metode_bayar')";
+}

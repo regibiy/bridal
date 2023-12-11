@@ -37,4 +37,16 @@ $(function () {
       },
     });
   });
+
+  $(document).on("input", "#lamaSewa", function () {
+    $("#subTotal").val("");
+    const harga = $("#harga").val();
+    const lamaSewa = $("#lamaSewa").val();
+    const hasil = parseInt(harga) * parseInt(lamaSewa);
+    if (isNaN(hasil)) {
+      $("#subTotal").val("");
+    } else {
+      $("#subTotal").val(hasil);
+    }
+  });
 });
