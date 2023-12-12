@@ -33,7 +33,7 @@ include_once("templates/header.php");
         </select>
         <!-- muncul select atau input -->
       </div>
-      <div class="form-group">
+      <div class="form-group" id="qtyGroup">
         <label class="fw-bold" for="qty">Qty</label>
         <input class="form-control" type="number" name="qty" id="qty" placeholder="Qty">
       </div>

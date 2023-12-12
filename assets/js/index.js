@@ -1,3 +1,7 @@
+function alertQty() {
+  alert("Stok Tidak Tersedia!");
+}
+
 $(function () {
   $(document).on("change", "#tipeJasa", function () {
     $("#detailJasa").remove();
@@ -11,12 +15,22 @@ $(function () {
         if (data.length == 0) {
           let input = $("<input />");
           input
-            .attr("class", "form-control")
-            .attr("name", "detail_jasa")
+            .attr("type", "hidden")
             .attr("id", "detailJasa")
-            .attr("placeholder", "Silakan Isi Detail Rias");
+            .attr("name", "detail_jasa")
+            .attr("class", "d-none")
+            .attr("value", "0-Dekorasi");
+          // input
+          //   .attr("class", "form-control")
+          //   .attr("name", "detail_jasa")
+          //   .attr("id", "detailJasa")
+          //   .attr("placeholder", "Silakan Isi Detail Dekorasi");
           $("#jasa").append(input);
+          $("#qtyGroup").addClass("d-none");
+          $("#qty").val("0");
         } else {
+          $("#qtyGroup").removeClass("d-none");
+          $("#qty").val("");
           let selectDetail = $("<select></select>");
           selectDetail
             .attr("id", "detailJasa")

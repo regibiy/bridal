@@ -15,20 +15,23 @@ include_once("templates/header.php");
 // validasi kode jasa ada atau tidak
 if (isset($_GET["idjasa"])) {
   $id_jasa = $_GET["idjasa"];
-  $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
+  $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'"; //VALIDASI DEKORASI
   $result = $conn->query($sql);
   $data = $result->fetch_assoc();
+  $jenis_jasa = $data["id_jenis_jasa"];
 } else {
   alert_with_redirect("Terjadi kesalahan!", "index.php");
 }
-// validasi quantity
-$sql2 = "SELECT COUNT(id) AS total FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id_jasa'";
-$result2 = $conn->query($sql2);
-$data2 = $result2->fetch_assoc();
+// validasi quantity, dilakukan ketika pakaian
+if ($jenis_jasa == 1) {
+  $sql2 = "SELECT COUNT(id) AS total FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id_jasa'";
+  $result2 = $conn->query($sql2);
+  $data2 = $result2->fetch_assoc();
 
-$hasil = $data["qty"] - $data2["total"];
-if ($hasil < 1) {
-  alert_with_redirect("Stok Baju Tidak Tersedia!", "list_pakaian.php");
+  $hasil = $data["qty"] - $data2["total"];
+  if ($hasil < 1) {
+    alert_with_redirect("Stok Baju Tidak Tersedia!", "list_pakaian.php");
+  }
 }
 ?>
 
@@ -109,7 +112,7 @@ if ($hasil < 1) {
                 <div class="col-md-2 mb-2">
                   <div class="form-outline">
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault1" checked>
+                      <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault1" value="Tunai" checked>
                       <label class="form-check-label" for="flexRadioDefault1">Tunai</label>
                     </div>
                   </div>
@@ -117,7 +120,7 @@ if ($hasil < 1) {
                 <div class="col-md-2 mb-4">
                   <div class="form-outline">
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault2">
+                      <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault2" value="Transfer">
                       <label class="form-check-label" for="flexRadioDefault2">Transfer</label>
                     </div>
                   </div>
