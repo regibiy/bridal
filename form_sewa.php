@@ -15,10 +15,16 @@ include_once("templates/header.php");
 // validasi kode jasa ada atau tidak
 if (isset($_GET["idjasa"])) {
   $id_jasa = $_GET["idjasa"];
-  $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'"; //VALIDASI DEKORASI
+  if (substr($id_jasa, 0, 2) == "DR") {
+    $sql = "SELECT * FROM tbl_jasa LEFT JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
+  } else {
+    $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
+  }
   $result = $conn->query($sql);
   $data = $result->fetch_assoc();
-  $jenis_jasa = $data["id_jenis_jasa"];
+  if ($result->num_rows > 0) {
+    $jenis_jasa = $data["id_jenis_jasa"];
+  }
 } else {
   alert_with_redirect("Terjadi kesalahan!", "index.php");
 }
@@ -68,24 +74,35 @@ if ($jenis_jasa == 1) {
                 </div>
                 <div class="col-md-6 mb-2 d-flex align-items-center">
                   <div class="form-outline datepicker w-100">
-                    <label for="tanggalSewa" class="form-label">Tanggal Sewa</label>
+                    <?php
+                    if ($data["id_jenis_jasa"] == 3) {
+                      echo "<label for='tanggalSewa' class='form-label'>Tanggal Rias</label>";
+                    } else {
+                      echo "<label for='tanggalSewa' class='form-label'>Tanggal Sewa</label>";
+                    }
+                    ?>
                     <input type="date" name="tanggal_sewa" id="tanggalSewa" class="form-control form-control-lg" />
                   </div>
                 </div>
               </div>
-              <div class="row mb-4">
-                <div class="col-md-6">
-                  <div class="form-outline">
-                    <label class="form-label" for="lamaSewa">Lama Sewa</label>
-                    <input type="number" name="lama_sewa" id="lamaSewa" class="form-control form-control-lg" placeholder="1" min="1" />
-                  </div>
+              <?php
+              if ($data["id_jenis_jasa"] != 3) {
+                echo "
+                <div class='row mb-4'>
+                <div class='col-md-6'>
+                <div class='form-outline'>
+                <label class='form-label' for='lamaSewa'>Lama Sewa</label>
+                <input type='number' name='lama_sewa' id='lamaSewa' class='form-control form-control-lg' placeholder='1' min='1' />
                 </div>
-              </div>
+                </div>
+                </div>";
+              }
+              ?>
               <div class="row mb-4">
                 <div class="col-12">
                   <div class="form-outline">
                     <label class="form-label" for="namaJasa">Nama Jasa</label>
-                    <input id="namaJasa" name="nama_jasa" class="form-control form-control-lg" value="<?= $data["nama_detail_jasa"] ?>" readonly />
+                    <input id="namaJasa" name="nama_jasa" class="form-control form-control-lg" value="<?= $data["nama_detail_jasa"] == null ? "Dekorasi" : $data["nama_detail_jasa"] ?>" readonly />
                     <input type="hidden" name="id_nama_jasa" value="<?= $data["id_detail_jasa"] ?>">
                     <input type="hidden" name="kode_jasa" value="<?= $id_jasa ?>">
                   </div>
@@ -94,7 +111,13 @@ if ($jenis_jasa == 1) {
               <div class="row mb-4">
                 <div class="col-12">
                   <div class="form-outline">
-                    <label class="form-label" for="harga">Harga Sewa</label>
+                    <?php
+                    if ($data["id_jenis_jasa"] == 3) {
+                      echo "<label class='form-label' for='harga'>Harga Rias</label>";
+                    } else {
+                      echo "<label class='form-label' for='harga'>Harga Sewa</label>";
+                    }
+                    ?>
                     <input id="harga" name="harga" class="form-control form-control-lg" value="<?= $data["harga"] ?>" readonly />
                   </div>
                 </div>

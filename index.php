@@ -26,22 +26,28 @@ include_once("templates/header.php");
   <h1 class="heading">Jasa Kami</h1>
   <div class="box-container">
     <div class="box">
-      <img src="assets/img/img_cp1.JPG" alt="">
+      <img src="assets/img/img_cp1.JPG" class="img-fluid" alt="sewa pakaian">
       <h3>Sewa Pakaian</h3>
       <p></p>
       <a href="list_pakaian.php" class="btn fw-bold">Lihat Lainnya</a>
     </div>
     <div class="box">
-      <img src="assets/img/dp_1.jpg" alt="">
+      <img src="assets/img/dp_1.jpg" class="img-fluid" alt="dekorasi pernikahan">
       <h3>Dekorasi Pernikahan</h3>
       <p></p>
       <a href="list_dekorasi.php" class="btn fw-bold">Lihat Lainnya</a>
     </div>
     <div class="box">
-      <img src="assets/img/rp1.jpg" alt="">
+      <img src="assets/img/rp1.jpg" class="img-fluid" alt="rias">
       <h3>Rias</h3>
       <p></p>
-      <a href="#" class="btn fw-bold">Lihat Lainnya</a>
+      <a href="list_rias.php" class="btn fw-bold">Lihat Lainnya</a>
+    </div>
+    <div class="box">
+      <img src="assets/img/rp1.jpg" class="img-fluid" alt="fotografer">
+      <h3>Fotografer</h3>
+      <p></p>
+      <a href="list_fotografer.php" class="btn fw-bold">Lihat Lainnya</a>
     </div>
   </div>
 </div>

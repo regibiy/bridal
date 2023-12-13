@@ -22,7 +22,7 @@ include_once("templates/header.php");
       <h2 class="text-center fw-bold">TAMBAH JASA</h2>
       <div class="form-group" id="jasa">
         <label class="fw-bold" for="tipeJasa">Tipe Jasa</label>
-        <select class="form-select my-3" name="jenis_jasa" id="tipeJasa"> <!-- id harusnya jenisJasa, malas ubah -->
+        <select class="form-select my-3" name="jenis_jasa" id="tipeJasa">
           <option value="0" selected hidden>Silakan Pilih Jasa</option>
           <?php
           $result = $conn->query("SELECT * FROM tbl_jenis_jasa");
