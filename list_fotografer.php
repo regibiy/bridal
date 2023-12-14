@@ -18,12 +18,12 @@ include_once("templates/header.php");
   <h1 class="heading">List Fotografer</h1>
   <div class="box-container">
     <?php
-    $sql = "SELECT * FROM tbl_jasa WHERE LEFT(id, 2) = 'RP' OR LEFT(id, 2) = 'RW'";
+    $sql = "SELECT * FROM tbl_jasa WHERE LEFT(id, 2) = 'FG'";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
       $id = $row["id"];
       echo "<div class='box'>";
-      echo "<img class='img-fluid mb-4' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Rias'>";
+      echo "<img class='img-fluid mb-4 img-cover' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Rias'>";
       echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
       echo "<a href='form_sewa.php?idjasa=" . $id . "' class='btn fw-bold'>Sewa</a>";
       echo "</div>";

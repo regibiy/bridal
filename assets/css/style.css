@@ -107,6 +107,10 @@ header.masthead {
   transform: scale(1.03);
 }
 
+.img-cover {
+  background-size: cover;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 20px;

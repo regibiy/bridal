@@ -15,7 +15,7 @@ include_once("templates/header.php");
 // validasi kode jasa ada atau tidak
 if (isset($_GET["idjasa"])) {
   $id_jasa = $_GET["idjasa"];
-  if (substr($id_jasa, 0, 2) == "DR") {
+  if (substr($id_jasa, 0, 2) == "DR" || substr($id_jasa, 0, 2) == "FG") {
     $sql = "SELECT * FROM tbl_jasa LEFT JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
   } else {
     $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
@@ -102,7 +102,15 @@ if ($jenis_jasa == 1) {
                 <div class="col-12">
                   <div class="form-outline">
                     <label class="form-label" for="namaJasa">Nama Jasa</label>
-                    <input id="namaJasa" name="nama_jasa" class="form-control form-control-lg" value="<?= $data["nama_detail_jasa"] == null ? "Dekorasi" : $data["nama_detail_jasa"] ?>" readonly />
+                    <?php
+                    if (substr($id_jasa, 0, 2) == "DR") {
+                      echo "<input id='namaJasa' name='nama_jasa' class='form-control form-control-lg' value='Dekorasi' readonly />";
+                    } else if (substr($id_jasa, 0, 2) == "FG") {
+                      echo "<input id='namaJasa' name='nama_jasa' class='form-control form-control-lg' value='Fotografer' readonly />";
+                    } else {
+                      echo "<input id='namaJasa' name='nama_jasa' class='form-control form-control-lg' value='" . $data["nama_detail_jasa"] . "' readonly />";
+                    }
+                    ?>
                     <input type="hidden" name="id_nama_jasa" value="<?= $data["id_detail_jasa"] ?>">
                     <input type="hidden" name="kode_jasa" value="<?= $id_jasa ?>">
                   </div>

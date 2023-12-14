@@ -39,10 +39,8 @@ if (isset($_POST["tambah_jasa"])) {
         $format_kode = "RP";
     } else if ($kode[1] == "Rias Wisuda") {
         $format_kode = "RW";
-    } else if ($kode[1] == "Fotografer Wedding") {
-        $format_kode = "FW";
-    } else if ($kode[1] == "Fotografer Prewedding") {
-        $format_kode = "FP";
+    } else if ($kode[1] == "Fotografer") {
+        $format_kode = "FG";
     }
 
     $result = $conn->query("SELECT MAX(id) AS max_number FROM tbl_jasa WHERE LEFT(id, 2) = '$format_kode'");
