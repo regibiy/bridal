@@ -2,6 +2,24 @@ function alertQty() {
   alert("Stok Tidak Tersedia!");
 }
 
+function rupiah(harga) {
+  let hasil_rupiah =
+    "Rp " + harga.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
+  return hasil_rupiah;
+}
+
+function formatTanggal(tanggal) {
+  let formattedDate = new Date(tanggal);
+  let day = formattedDate.getDate();
+  let month = formattedDate.getMonth() + 1;
+  let year = formattedDate.getFullYear();
+
+  day = day < 10 ? "0" + day : day;
+  month = month < 10 ? "0" + month : month;
+
+  return day + "-" + month + "-" + year;
+}
+
 $(function () {
   new DataTable("#example");
 
@@ -90,7 +108,7 @@ $(function () {
     if (isNaN(hasil)) {
       $("#subTotal").val("");
     } else {
-      $("#subTotal").val(hasil);
+      $("#subTotal").val(rupiah(hasil));
     }
   });
 
@@ -108,5 +126,60 @@ $(function () {
         );
       },
     });
+  });
+
+  $(document).on("click", ".btn-sewa-detail", function () {
+    const id = $(this).data("id");
+    $.ajax({
+      url: `utils/get_det_sewa.php?id=${id}`,
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $(".modal-title-detail").text(`Detail Penyewaan ${id}`);
+        $("#tanggalTransaksiDetail").text(
+          `Tanggal Transaksi : ${formatTanggal(data[0].tanggal_transaksi)}`
+        );
+        $("#namaDetail").text(`Nama Penyewa : ${data[0].nama}`);
+        $("#alamatDetail").text(`Alamat Penyewa : ${data[0].alamat}`);
+        $("#hpDetail").text(`No. HP Penyewa : ${data[0].no_hp}`);
+        $("#tanggalSewaDetail").text(
+          `Tanggal Sewa : ${formatTanggal(data[0].tanggal_sewa)}`
+        );
+        $("#lamaSewaDetail").text(
+          `Lama Sewa : ${formatTanggal(data[0].lama_sewa)}`
+        );
+        if (data[0].nama_detail_jasa == null) {
+          let tempData = data[0].kode_jasa.substr(0, 2);
+          if (tempData == "DR") {
+            $namaDetailJasa = "Dekorasi";
+          } else if (tempData == "FG") {
+            $namaDetailJasa = "Fotografer";
+          }
+        } else {
+          $namaDetailJasa = data[0].nama_detail_jasa;
+        }
+        $("#namaJasaDetail").text(`Nama Jasa : ${$namaDetailJasa}`);
+        $("#kodeJasaDetail").text(`Kode Jasa : ${data[0].kode_jasa}`);
+        $("#hargaSewaDetail").text(
+          `Harga Jasa : ${rupiah(data[0].lama_sewa * data[0].harga_sewa)}`
+        );
+        $("#metodeBayarDetail").text(
+          `Metode Pembayaran : ${data[0].metode_bayar}`
+        );
+        $("#statusSewaDetail").text(`Status Sewa : ${data[0].status_sewa}`);
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-update-status", function () {
+    const id = $(this).data("id");
+    $(".id-update-status").val(id);
+  });
+
+  $(document).on("click", ".btn-cetak", function (e) {
+    // e.preventDefault();
+    const id = $(this).data("id");
+    console.log(id);
+    $(this).attr("href", `reports/faktur.php?id=${id}`);
   });
 });

@@ -1,8 +1,16 @@
 <?php
+include_once("../core/aksi.php");
+
+$id = $_GET["id"];
+
+$sql = "SELECT *, tbl_penyewaan.id AS id_sewa FROM tbl_penyewaan LEFT JOIN tbl_detail_jasa ON tbl_penyewaan.nama_jasa = tbl_detail_jasa.id WHERE tbl_penyewaan.id = '$id'";
+$result = $conn->query($sql);
+$data = $result->fetch_assoc();
 
 require_once '../vendor/autoload.php';
 
 $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/custom/temp/dir/path', 'default_font' => 'dejavusans']);
+
 
 $html = '
 <style>
@@ -19,7 +27,7 @@ $html = '
 <p style="text-align:center;margin-top:0;margin-bottom:24px;">ddmmyy999</p>
 <table style="width:100%;margin-bottom:24px">
 <tr>
-<td style="width:50%;">Nama : <span style="font-weight:bold;">Henri</span></td>
+<td style="width:50%;">Nama : <span style="font-weight:bold;">' . $data["nama"] . '</span></td>
 <td style="width:50%;text-align:right;">Tanggal : <span style="font-weight:bold;">dd-mm-yyyy</span></td>
 </tr>
 <tr>
@@ -48,4 +56,4 @@ $html = '
 <p style="text-align:center;font-weight:bold;margin:0;">Juminten</p>
 <p style="text-align:center;font-weight:bold;margin:3px;">dd-mm-yyyy</p>';
 $mpdf->WriteHTML($html);
-$mpdf->Output();
+$mpdf->Output("test.pdf", \Mpdf\Output\Destination::DOWNLOAD);

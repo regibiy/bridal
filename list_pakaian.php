@@ -30,7 +30,7 @@ include_once("templates/header.php");
       echo "<div class='box'>";
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Gaun'>";
       echo "<p class='fw-bold'>Qty: " . $quantity . "</p>";
-      echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
+      echo "<p class='fw-bold'>Harga : " . rupiah($row["harga"]) . "</p>";
 
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";
@@ -55,7 +55,7 @@ include_once("templates/header.php");
       echo "<div class='box'>";
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Pakaian Adat'>";
       echo "<p class='fw-bold'>Qty: " . $quantity . "</p>";
-      echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
+      echo "<p class='fw-bold'>Harga : " . rupiah($row["harga"]) . "</p>";
 
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";
@@ -80,7 +80,7 @@ include_once("templates/header.php");
       echo "<div class='box'>";
       echo "<img class='img-fluid' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Pakaian Nikah'>";
       echo "<p class='fw-bold'>Qty: " . $quantity . "</p>";
-      echo "<p class='fw-bold'>Harga : " . $row["harga"] . "</p>";
+      echo "<p class='fw-bold'>Harga : " . rupiah($row["harga"]) . "</p>";
 
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";

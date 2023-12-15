@@ -126,7 +126,8 @@ if ($jenis_jasa == 1) {
                       echo "<label class='form-label' for='harga'>Harga Sewa</label>";
                     }
                     ?>
-                    <input id="harga" name="harga" class="form-control form-control-lg" value="<?= $data["harga"] ?>" readonly />
+                    <input id="tampilHarga" name="tampil_harga" class="form-control form-control-lg" value="<?= rupiah($data["harga"]) ?>" readonly />
+                    <input type="hidden" name="harga" id="harga" value="<?= $data["harga"] ?>">
                   </div>
                 </div>
               </div>

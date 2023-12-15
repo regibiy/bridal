@@ -110,3 +110,15 @@ if (isset($_POST["tambah_sewa"])) {
         alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
     }
 }
+
+if (isset($_POST["ubah_status"])) {
+    $id = $conn->real_escape_string($_POST["id"]);
+    $status_sewa = $conn->real_escape_string($_POST["status_sewa"]);
+    $sql = "UPDATE tbl_penyewaan SET status_sewa = '$status_sewa' WHERE id = '$id'";
+    $conn->query($sql);
+    if ($conn->affected_rows > 0) {
+        alert_with_redirect("Penyewaan Berhasil DiKonfirmasi", "../pengembalian.php"); //redirect to laporan.php
+    } else {
+        alert_with_redirect("Penyewaan Gagal DiKonfirmasi", "../pengembalian.php"); //redirect to laporan.php
+    }
+}
