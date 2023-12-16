@@ -33,7 +33,6 @@ function unggah_gambar($file_name, $file_size, $temp_loc, $target_loc)
 
 function rupiah($angka)
 {
-
     $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
     return $hasil_rupiah;
 }

@@ -23,7 +23,7 @@ include_once("templates/header.php");
     while ($row = $result->fetch_assoc()) {
       $id = $row["id"];
       echo "<div class='box'>";
-      echo "<img class='img-fluid mb-4 img-cover' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Rias'>";
+      echo "<img class='img-fluid mb-4' src='assets/upload_img/" . $row['gambar'] . "' alt='Gambar Rias'>";
       echo "<p class='fw-bold'>Harga : " . rupiah($row["harga"]) . "</p>";
       echo "<a href='form_sewa.php?idjasa=" . $id . "' class='btn fw-bold'>Sewa</a>";
       echo "</div>";

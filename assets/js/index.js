@@ -22,6 +22,7 @@ function formatTanggal(tanggal) {
 
 $(function () {
   new DataTable("#example");
+  new DataTable("#example2");
 
   $(document).on("change", "#tipeJasa", function () {
     $("#detailJasa").remove();
@@ -176,10 +177,27 @@ $(function () {
     $(".id-update-status").val(id);
   });
 
-  $(document).on("click", ".btn-cetak", function (e) {
-    // e.preventDefault();
+  $(document).on("click", ".btn-cetak", function () {
     const id = $(this).data("id");
-    console.log(id);
     $(this).attr("href", `reports/faktur.php?id=${id}`);
+  });
+
+  $(document).on("click", ".btn-cetak-laporan", function (e) {
+    e.preventDefault();
+    const tanggalAwal = $(".form-tanggal-awal").val();
+    const tanggalAkhir = $(".form-tanggal-akhir").val();
+    if (tanggalAwal.length < 1 || tanggalAkhir.length < 1) {
+      $(".alert-warning-periode")
+        .html("<p class='m-0'>Isi Formulir Periode Laporan dengan Benar!</p>")
+        .removeClass("d-none");
+    } else {
+      location.href = `reports/laporan_sewa.php?tglawal=${tanggalAwal}&tglakhir=${tanggalAkhir}`;
+    }
+  });
+
+  $(document).on("click", ".btn-close-periode", function () {
+    $(".form-tanggal-awal").val("");
+    $(".form-tanggal-akhir").val("");
+    $(".alert-warning-periode").addClass("d-none");
   });
 });
