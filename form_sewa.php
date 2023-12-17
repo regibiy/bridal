@@ -96,6 +96,8 @@ if ($jenis_jasa == 1) {
                 </div>
                 </div>
                 </div>";
+              } else {
+                echo "<input type='hidden' name='lama_sewa' id='lamaSewa' class='form-control form-control-lg' value='0' />";
               }
               ?>
               <div class="row mb-4">
@@ -135,7 +137,13 @@ if ($jenis_jasa == 1) {
                 <div class="col-12">
                   <div class="form-outline">
                     <label class="form-label" for="subTotal">Sub Total Harga</label>
-                    <input id="subTotal" class="form-control form-control-lg" readonly />
+                    <?php
+                    if ($data["id_jenis_jasa"] != 3) {
+                      echo "<input id='subTotal' class='form-control form-control-lg' readonly />";
+                    } else {
+                      echo "<input id='subTotal' class='form-control form-control-lg' value='" . rupiah($data["harga"]) . "' readonly />";
+                    }
+                    ?>
                   </div>
                 </div>
               </div>

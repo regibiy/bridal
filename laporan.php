@@ -137,7 +137,7 @@ include_once("templates/header.php");
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="" class="btn btn-primary btn-cetak-laporan">Cetak</a>
+                                    <a href="" target="_blank" class="btn btn-primary btn-cetak-laporan">Cetak</a>
                                     <button type="button" class="btn btn-secondary btn-close-periode" data-bs-dismiss="modal">Batal</button>
                                 </div>
                             </div>

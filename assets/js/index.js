@@ -191,7 +191,10 @@ $(function () {
         .html("<p class='m-0'>Isi Formulir Periode Laporan dengan Benar!</p>")
         .removeClass("d-none");
     } else {
-      location.href = `reports/laporan_sewa.php?tglawal=${tanggalAwal}&tglakhir=${tanggalAkhir}`;
+      window.open(
+        `reports/laporan_sewa.php?tglawal=${tanggalAwal}&tglakhir=${tanggalAkhir}`,
+        `_blank`
+      );
     }
   });
 

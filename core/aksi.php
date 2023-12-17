@@ -85,6 +85,7 @@ if (isset($_POST["tambah_sewa"])) {
     $kode_jasa = $conn->real_escape_string($_POST["kode_jasa"]);
     $harga_sewa = $conn->real_escape_string($_POST["harga"]);
     $metode_bayar = $conn->real_escape_string($_POST["metode_bayar"]);
+    $status_sewa = $conn->real_escape_string("Belum Dikembalikan");
 
     $result = $conn->query("SELECT MAX(id) AS max_val FROM tbl_penyewaan WHERE tanggal_transaksi = CURRENT_DATE");
     $data = $result->fetch_assoc();
@@ -102,10 +103,10 @@ if (isset($_POST["tambah_sewa"])) {
         $counter_final = date("dmy") . "001";
     }
     $tanggal = date("Y-m-d");
-    $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, lama_sewa, nama_jasa, kode_jasa, harga_sewa, metode_bayar) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$lama_sewa', '$nama_jasa', '$kode_jasa', '$harga_sewa', '$metode_bayar')";
+    $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, lama_sewa, nama_jasa, kode_jasa, harga_sewa, metode_bayar, status_sewa) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$lama_sewa', '$nama_jasa', '$kode_jasa', '$harga_sewa', '$metode_bayar', '$status_sewa')";
     $conn->query($sql);
     if ($conn->affected_rows > 0) {
-        alert_with_redirect("Transaksi Penyewaan Berhasil!", "../index.php"); //redirect to laporan.php
+        alert_with_redirect("Transaksi Penyewaan Berhasil!", "../laporan.php"); //redirect to laporan.php
     } else {
         alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
     }
