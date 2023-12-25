@@ -24,7 +24,7 @@ include_once("templates/header.php");
     $result2 = $conn->query($sql);
     while ($row = $result2->fetch_assoc()) {
       $id = $row["id"];
-      $result = $conn->query("SELECT COUNT(id) AS max_value FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
+      $result = $conn->query("SELECT COUNT(tbl_penyewaan.id) AS max_value FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id WHERE tbl_penyewaan.tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
       $data = $result->fetch_assoc();
       $quantity = $row["qty"] - $data["max_value"];
 
@@ -54,7 +54,7 @@ include_once("templates/header.php");
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
       $id = $row["id"];
-      $result2 = $conn->query("SELECT COUNT(id) AS max_value FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
+      $result2 = $conn->query("SELECT COUNT(tbl_penyewaan.id) AS max_value FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id WHERE tbl_penyewaan.tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
       $data = $result2->fetch_assoc();
       $quantity = $row["qty"] - $data["max_value"];
 
@@ -84,7 +84,7 @@ include_once("templates/header.php");
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
       $id = $row["id"];
-      $result2 = $conn->query("SELECT COUNT(id) AS max_value FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
+      $result2 = $conn->query("SELECT COUNT(tbl_penyewaan.id) AS max_value FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id WHERE tbl_penyewaan.tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id'");
       $data = $result2->fetch_assoc();
       $quantity = $row["qty"] - $data["max_value"];
 

@@ -23,29 +23,26 @@ include_once("templates/header.php");
             <thead>
                 <tr>
                     <th>Tanggal Transaksi</th>
-                    <th>Nama</th>
+                    <th>Data Penyewa</th>
                     <th>Tanggal Sewa</th>
-                    <th>Lama Sewa</th>
-                    <th>Nama Jasa</th>
-                    <th>Harga Sewa</th>
-                    <th>Detail Jasa</th>
-                    <th>Status</th>
+                    <th>Metode Bayar</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT *, tbl_penyewaan.id AS id_sewa FROM tbl_penyewaan INNER JOIN tbl_jasa ON tbl_penyewaan.kode_jasa = tbl_jasa.id WHERE status_sewa <> 'Dikembalikan'";
+                // $sql = "SELECT *, tbl_penyewaan.id AS id_sewa FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id INNER JOIN tbl_jasa ON tbl_detail_penyewaan.kode_jasa = tbl_jasa.id WHERE tbl_detail_penyewaan.status_sewa <> 'Dikembalikan'";
+                $sql = "SELECT * FROM tbl_penyewaan";
                 $result = $conn->query($sql);
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . format_tanggal($row["tanggal_transaksi"]) . "</td>";
-                    echo "<td>" . $row["nama"] . "</td>";
+                    echo "<td>" . $row["nama"] . " | " . $row["alamat"] . " | " . $row["no_hp"] . "</td>";
                     echo "<td>" . format_tanggal($row["tanggal_sewa"]) . "</td>";
-                    echo "<td>" . $row["lama_sewa"] . " Hari</td>";
-                    echo "<td><button type='button' class='btn btn-outline-secondary btn-gambar' data-bs-toggle='modal' data-bs-target='#gambar' data-id='" . $row["kode_jasa"] . "'>" . $row["kode_jasa"] . "</button></td>";
-                    echo "<td>" . rupiah($row["harga_sewa"]) . "</td>";
-                    echo "<td><button class='btn btn-outline-secondary btn-sewa-detail' data-bs-toggle='modal' data-bs-target='#detail' data-id='" . $row["id_sewa"] . "'>Detail</button></td>";
-                    echo "<td><button class='btn btn-primary btn-update-status' data-id='" . $row["id_sewa"] . "' data-bs-toggle='modal' data-bs-target='#notif'>Dikembalikan</button></td>";
+                    echo "<td>" . $row["metode_bayar"] . "</td>";
+                    echo "<td>";
+                    echo "<button class='btn btn-primary btn-sewa-detail' data-bs-toggle='modal' data-bs-target='#detail' data-id='" . $row["id"] . "'>Detail</button>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>
@@ -77,24 +74,14 @@ include_once("templates/header.php");
 </form>
 
 <div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title modal-title-detail fs-5" id="exampleModalLabel"></h1>
+                <h1 class="modal-title modal-title-detail fs-5" id="detailListJasa"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body modal-body-detail">
-                <p id="tanggalTransaksiDetail"></p>
-                <p id="namaDetail"></p>
-                <p id="alamatDetail"></p>
-                <p id="hpDetail"></p>
-                <p id="tanggalSewaDetail"></p>
-                <p id="lamaSewaDetail"></p>
-                <p id="namaJasaDetail"></p>
-                <p id="kodeJasaDetail"></p>
-                <p id="hargaSewaDetail"></p>
-                <p id="metodeBayarDetail"></p>
-                <p id="statusSewaDetail"></p>
+                <button class="btn btn-primary">test</button>
             </div>
         </div>
     </div>

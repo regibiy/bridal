@@ -137,6 +137,7 @@ $(function () {
     }
   });
 
+  //WARNINGGGG
   $(document).on("click", ".btn-gambar", function () {
     const id = $(this).data("id");
     $.ajax({
@@ -152,46 +153,64 @@ $(function () {
       },
     });
   });
-
+  //WARNINGGGG
   $(document).on("click", ".btn-sewa-detail", function () {
     const id = $(this).data("id");
+    $("#detailListJasa").text(`Daftar Jasa Pada Nomor Transaksi ${id}`);
     $.ajax({
       url: `utils/get_det_sewa.php?id=${id}`,
       method: "post",
       dataType: "json",
       success: function (data) {
-        $(".modal-title-detail").text(`Detail Penyewaan ${id}`);
-        $("#tanggalTransaksiDetail").text(
-          `Tanggal Transaksi : ${formatTanggal(data[0].tanggal_transaksi)}`
-        );
-        $("#namaDetail").text(`Nama Penyewa : ${data[0].nama}`);
-        $("#alamatDetail").text(`Alamat Penyewa : ${data[0].alamat}`);
-        $("#hpDetail").text(`No. HP Penyewa : ${data[0].no_hp}`);
-        $("#tanggalSewaDetail").text(
-          `Tanggal Sewa : ${formatTanggal(data[0].tanggal_sewa)}`
-        );
-        $("#lamaSewaDetail").text(
-          `Lama Sewa : ${formatTanggal(data[0].lama_sewa)}`
-        );
-        if (data[0].nama_detail_jasa == null) {
-          let tempData = data[0].kode_jasa.substr(0, 2);
-          if (tempData == "DR") {
-            $namaDetailJasa = "Dekorasi";
-          } else if (tempData == "FG") {
-            $namaDetailJasa = "Fotografer";
-          }
-        } else {
-          $namaDetailJasa = data[0].nama_detail_jasa;
-        }
-        $("#namaJasaDetail").text(`Nama Jasa : ${$namaDetailJasa}`);
-        $("#kodeJasaDetail").text(`Kode Jasa : ${data[0].kode_jasa}`);
-        $("#hargaSewaDetail").text(
-          `Harga Jasa : ${rupiah(data[0].lama_sewa * data[0].harga_sewa)}`
-        );
-        $("#metodeBayarDetail").text(
-          `Metode Pembayaran : ${data[0].metode_bayar}`
-        );
-        $("#statusSewaDetail").text(`Status Sewa : ${data[0].status_sewa}`);
+        $(".modal-body-detail").html(null);
+        let table = $("<table class='table table-bordered'></table>");
+        let tRow = $("<tr></tr>");
+        let tHeadGambar = $("<th>Gambar Jasa</th>");
+        let tHeadKodeJasa = $("<th>Kode Jasa</th>");
+        let tHeadLamaSewa = $("<th>Lama Sewa</th>");
+        let tHeadHargaSewa = $("<th>Harga Sewa</th>");
+        let tHeadStatus = $("<th>Status Sewa</th>");
+        let tHeadTanggalKembali = $("<th>Tanggal Kembali</th>");
+        let tHeadAksi = $("<th>Aksi</th>");
+        tRow
+          .append(tHeadGambar)
+          .append(tHeadKodeJasa)
+          .append(tHeadLamaSewa)
+          .append(tHeadHargaSewa)
+          .append(tHeadStatus)
+          .append(tHeadTanggalKembali)
+          .append(tHeadAksi);
+        table.append(tRow);
+        $(".modal-body-detail").append(table);
+        data.forEach((element) => {
+          let tRow = $("<tr></tr>");
+          let tDataGambar = $(
+            `<td><img src='assets/upload_img/${element.gambar}' class='img-thumbnail' width='150'/></td>`
+          );
+          let tDataKodeJasa = $(`<td>${element.kode_jasa}</td>`);
+          let tDataLamaSewa = $(`<td>${element.lama_sewa} Hari</td>`);
+          let tDataHargaSewa = $(
+            `<td>${rupiah(parseInt(element.harga_sewa))}</td>`
+          );
+          let tDataStatus = $(`<td>${element.status_sewa}</td>`);
+          let tDataTanggalKembali = $(
+            `<td>${element.tanggal_dikembalikan}</td>`
+          );
+          let tDataAksi = $("<td></td>");
+          let btn = $(
+            "<button type='button' class='btn btn-primary' style='background-color:#0069D9;color:#fff;'>Dikembalikan</button>"
+          );
+          tDataAksi.append(btn);
+          tRow
+            .append(tDataGambar)
+            .append(tDataKodeJasa)
+            .append(tDataLamaSewa)
+            .append(tDataHargaSewa)
+            .append(tDataStatus)
+            .append(tDataTanggalKembali)
+            .append(tDataAksi);
+          table.append(tRow);
+        });
       },
     });
   });
@@ -260,5 +279,9 @@ $(function () {
         $("#total").text(rupiah(tampilTotalKeranjang()));
       },
     });
+  });
+
+  $(document).on("click", ".btn-beli", function () {
+    $(".total-to-pay").text(rupiah(tampilTotalKeranjang()));
   });
 });

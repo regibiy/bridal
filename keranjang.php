@@ -44,6 +44,10 @@ include_once("templates/header.php");
                 echo "<input type='text' class='form-control form-control-sm col-1 me-3 text-center input-lama-sewa' id='" . $row["id_jasa"] . "' value='" . $row["lama_sewa"] . "' readonly />";
                 echo "<button type='button' class='btn btn-sm btn-info btn-tambah' data-idjasa='" . $row["id_jasa"] . "' data-harga='" . $row["harga"] . "'>+</button>";
                 echo "</div>";
+            } else {
+                echo "<div class='d-flex align-items-center atur-lama-sewa'>";
+                echo "<input type='hidden' class='form-control form-control-sm col-1 me-3 text-center input-lama-sewa' id='" . $row["id_jasa"] . "' value='" . $row["lama_sewa"] . "' readonly />";
+                echo "</div>";
             }
             echo "</div>";
             echo "<div class='col-2 text-end'>";
@@ -63,10 +67,72 @@ include_once("templates/header.php");
                 <p class="m-0">Total</p>
                 <p class="fw-semibold m-0" id="total"></p>
             </div>
-            <a href="form_sewa_old.php?idjasa=GN01" class="btn btn-primary">Beli</a>
+            <button type="button" class="btn btn-primary btn-beli" data-bs-toggle="modal" data-bs-target="#formSewa">Beli</button>
         </div>
     </div>
 </div>
 
+<!-- Modal -->
+<form action="core/aksi.php" method="post" autocomplete="off">
+    <div class="modal fade" id="formSewa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Data Transaksi Sewa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="nama" class="form-label">Nama</label>
+                            <input type="text" class="form-control" id="name" name="nama" placeholder="Nama Penyewa" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="alamat" class="form-label">Alamat</label>
+                            <textarea name="alamat" id="alamat" class="form-control" placeholder="Alamat Penyewa" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="noHp" class="form-label">No Handphone</label>
+                            <input type="number" id="noHp" name="no_hp" class="form-control" placeholder="Nomor HP Penyewa" required />
+                        </div>
+                        <div class="col">
+                            <label for="tanggalSewa" class="form-label">Tanggal Sewa</label>
+                            <input type="date" name="tanggal_sewa" id="tanggalSewa" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label class="form-label" for="metodeBayar">Metode Pembayaran</label>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault1" value="Tunai" checked required>
+                                <label class="form-check-label" for="flexRadioDefault1">Tunai</label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="metode_bayar" id="flexRadioDefault2" value="Transfer" required>
+                                <label class="form-check-label" for="flexRadioDefault2">Transfer</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 text-end">
+                        <div class="col">
+                            <p class="fw-semibold">Total yang Harus Dibayarkan :</p>
+                            <p class="total-to-pay fw-bold m-0"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary" name="tambah_sewa">Proses</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 <?php
 include_once("templates/footer.php");

@@ -80,12 +80,7 @@ if (isset($_POST["tambah_sewa"])) {
     $alamat = $conn->real_escape_string($_POST["alamat"]);
     $no_hp = $conn->real_escape_string($_POST["no_hp"]);
     $tanggal_sewa = $conn->real_escape_string($_POST["tanggal_sewa"]);
-    $lama_sewa = $conn->real_escape_string($_POST["lama_sewa"]);
-    $nama_jasa = $conn->real_escape_string($_POST["id_nama_jasa"]);
-    $kode_jasa = $conn->real_escape_string($_POST["kode_jasa"]);
-    $harga_sewa = $conn->real_escape_string($_POST["harga"]);
     $metode_bayar = $conn->real_escape_string($_POST["metode_bayar"]);
-    $status_sewa = $conn->real_escape_string("Belum Dikembalikan");
 
     $result = $conn->query("SELECT MAX(id) AS max_val FROM tbl_penyewaan WHERE tanggal_transaksi = CURRENT_DATE");
     $data = $result->fetch_assoc();
@@ -102,13 +97,30 @@ if (isset($_POST["tambah_sewa"])) {
     } else {
         $counter_final = date("dmy") . "001";
     }
+
     $tanggal = date("Y-m-d");
-    $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, lama_sewa, nama_jasa, kode_jasa, harga_sewa, metode_bayar, status_sewa) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$lama_sewa', '$nama_jasa', '$kode_jasa', '$harga_sewa', '$metode_bayar', '$status_sewa')";
+    $sql = "SELECT * FROM tbl_keranjang INNER JOIN tbl_jasa ON tbl_keranjang.id_jasa = tbl_jasa.id";
+    $result = $conn->query($sql);
+    $multiple_query = "";
+    while ($row = $result->fetch_assoc()) {
+        $kode_jasa = $row["id_jasa"];
+        $lama_sewa = $row["lama_sewa"];
+        $harga = $row["harga"];
+        $status_sewa = "Belum Dikembalikan";
+        $multiple_query .= "INSERT INTO tbl_detail_penyewaan (id, kode_jasa, lama_sewa, harga_sewa, status_sewa) VALUES ('$counter_final', '$kode_jasa', '$lama_sewa', '$harga', '$status_sewa');";
+    }
+
+    $status_sewa = $conn->real_escape_string("Belum Dikembalikan");
+    $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, metode_bayar) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$metode_bayar')";
     $conn->query($sql);
     if ($conn->affected_rows > 0) {
-        alert_with_redirect("Transaksi Penyewaan Berhasil!", "../laporan.php"); //redirect to laporan.php
+        $conn->multi_query($multiple_query);
+        // clear basket after transaction ERROR
+        die;
+        $conn->query("DELETE FROM tbl_keranjang");
+        // alert_with_redirect("Transaksi Penyewaan Berhasil!", "../laporan.php");
     } else {
-        alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
+        // alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
     }
 }
 
