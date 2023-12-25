@@ -2,6 +2,7 @@
 $data = [
   "judul" => "Beranda",
   "penanda_beranda" => "active",
+  "penanda_keranjang" => "",
   "penanda_tambah_jasa" => "",
   "penanda_pengembalian" => "",
   "penanda_laporan" => "",
@@ -22,7 +23,7 @@ include_once("templates/header.php");
 </header>
 
 <!-- Bagian Jasa -->
-<div class="container">
+<div class="container" id="jasa">
   <h1 class="heading">Jasa Kami</h1>
   <div class="box-container">
     <div class="box">

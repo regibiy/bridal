@@ -2,6 +2,7 @@
 $data = [
   "judul" => "Daftar Pakaian",
   "penanda_beranda" => "active",
+  "penanda_keranjang" => "",
   "penanda_tambah_jasa" => "",
   "penanda_pengembalian" => "",
   "penanda_laporan" => "",
@@ -35,7 +36,12 @@ include_once("templates/header.php");
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";
       } else {
-        echo "<a href='form_sewa.php?idjasa=" . $id . "' class='btn fw-bold'>Sewa</a>";
+        echo "
+        <form action='core/aksi.php' method='post'>
+        <input type='hidden' name='id_jasa' value='" . $id . "' />
+        <input type='hidden' name='url' value='../list_pakaian.php' />
+        <button type='submit' class='btn fw-bold' name='tambah_keranjang'>Sewa</button>
+        </form>";
       }
       echo "</div>";
     }
@@ -60,7 +66,12 @@ include_once("templates/header.php");
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";
       } else {
-        echo "<a href='form_sewa.php?idjasa=" . $id . "' class='btn fw-bold'>Sewa</a>";
+        echo "
+        <form action='core/aksi.php' method='post'>
+        <input type='hidden' name='id_jasa' value='" . $id . "' />
+        <input type='hidden' name='url' value='../list_pakaian.php' />
+        <button type='submit' class='btn fw-bold' name='tambah_keranjang'>Sewa</button>
+        </form>";
       }
       echo "</div>";
     }
@@ -85,7 +96,12 @@ include_once("templates/header.php");
       if ($quantity == 0) {
         echo "<button class='btn fw-bold' onclick='alertQty()'>Sewa</button>";
       } else {
-        echo "<a href='form_sewa.php?idjasa=" . $id . "' class='btn fw-bold'>Sewa</a>";
+        echo "
+        <form action='core/aksi.php' method='post'>
+        <input type='hidden' name='id_jasa' value='" . $id . "' />
+        <input type='hidden' name='url' value='../list_pakaian.php' />
+        <button type='submit' class='btn fw-bold' name='tambah_keranjang'>Sewa</button>
+        </form>";
       }
       echo "</div>";
     }

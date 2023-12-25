@@ -41,3 +41,12 @@ function format_tanggal($tanggal)
 {
     return date('d-m-Y', strtotime($tanggal));
 }
+
+function count_keranjang()
+{
+    global $conn;
+    $sql = "SELECT COUNT(id_jasa) AS total_item FROM tbl_keranjang";
+    $result = $conn->query($sql);
+    $data = $result->fetch_assoc();
+    return $data;
+}

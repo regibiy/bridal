@@ -13,33 +13,33 @@ include_once("core/aksi.php");
 
 if (!login_admin()) header("Location: login.php");
 include_once("templates/header.php");
-// if (isset($_GET["idjasa"])) {
-//   $id_jasa = $_GET["idjasa"];
-//   if (substr($id_jasa, 0, 2) == "DR" || substr($id_jasa, 0, 2) == "FG") {
-//     $sql = "SELECT * FROM tbl_jasa LEFT JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
-//   } else {
-//     $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
-//   }
-//   $result = $conn->query($sql);
-//   $data = $result->fetch_assoc();
-//   if ($result->num_rows > 0) {
-//     $jenis_jasa = $data["id_jenis_jasa"];
-//   }
-// } else {
-//   alert_with_redirect("Terjadi kesalahan!", "index.php");
-// }
-
+// validasi kode jasa ada atau tidak
+if (isset($_GET["idjasa"])) {
+  $id_jasa = $_GET["idjasa"];
+  if (substr($id_jasa, 0, 2) == "DR" || substr($id_jasa, 0, 2) == "FG") {
+    $sql = "SELECT * FROM tbl_jasa LEFT JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
+  } else {
+    $sql = "SELECT * FROM tbl_jasa INNER JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id WHERE tbl_jasa.id = '$id_jasa'";
+  }
+  $result = $conn->query($sql);
+  $data = $result->fetch_assoc();
+  if ($result->num_rows > 0) {
+    $jenis_jasa = $data["id_jenis_jasa"];
+  }
+} else {
+  alert_with_redirect("Terjadi kesalahan!", "index.php");
+}
 // validasi quantity, dilakukan ketika pakaian
-// if ($jenis_jasa == 1) {
-//   $sql2 = "SELECT COUNT(id) AS total FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id_jasa'";
-//   $result2 = $conn->query($sql2);
-//   $data2 = $result2->fetch_assoc();
+if ($jenis_jasa == 1) {
+  $sql2 = "SELECT COUNT(id) AS total FROM tbl_penyewaan WHERE tanggal_sewa >= CURRENT_DATE AND kode_jasa = '$id_jasa'";
+  $result2 = $conn->query($sql2);
+  $data2 = $result2->fetch_assoc();
 
-//   $hasil = $data["qty"] - $data2["total"];
-//   if ($hasil < 1) {
-//     alert_with_redirect("Stok Baju Tidak Tersedia!", "list_pakaian.php");
-//   }
-// }
+  $hasil = $data["qty"] - $data2["total"];
+  if ($hasil < 1) {
+    alert_with_redirect("Stok Baju Tidak Tersedia!", "list_pakaian.php");
+  }
+}
 ?>
 
 <section class="vh-100 gradient-custom">

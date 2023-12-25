@@ -118,8 +118,43 @@ if (isset($_POST["ubah_status"])) {
     $sql = "UPDATE tbl_penyewaan SET status_sewa = '$status_sewa' WHERE id = '$id'";
     $conn->query($sql);
     if ($conn->affected_rows > 0) {
-        alert_with_redirect("Penyewaan Berhasil DiKonfirmasi", "../pengembalian.php"); //redirect to laporan.php
+        alert_with_redirect("Penyewaan Berhasil DiKonfirmasi", "../pengembalian.php");
     } else {
-        alert_with_redirect("Penyewaan Gagal DiKonfirmasi", "../pengembalian.php"); //redirect to laporan.php
+        alert_with_redirect("Penyewaan Gagal DiKonfirmasi", "../pengembalian.php");
     }
+}
+
+if (isset($_POST["tambah_keranjang"])) {
+    $id_jasa = $conn->real_escape_string($_POST["id_jasa"]);
+    $url = $conn->real_escape_string($_POST["url"]);
+    $sql = "SELECT * FROM tbl_keranjang WHERE id_jasa = '$id_jasa'";
+    $result = $conn->query($sql);
+    $data = $result->fetch_assoc();
+    $format_kode = ["RP", "RW", "FG"];
+    if ($result->num_rows > 0) {
+        $kode = substr($data["id_jasa"], 0, 2);
+        if (in_array($kode, $format_kode)) $lama_sewa = 1;
+        else $lama_sewa = 3;
+        if ($data['id_jasa'] != $id_jasa) {
+            $sql = "INSERT INTO tbl_keranjang (id_jasa, lama_sewa) VALUES ('$id_jasa', '$lama_sewa')";
+            $conn->query($sql);
+            echo "<script>location.href='../index.php#jasa'</script>";
+        } else {
+            alert_with_redirect("Produk jasa sudah di dalam keranjang!", $url);
+        }
+    } else {
+        $kode = substr($id_jasa, 0, 2);
+        if (in_array($kode, $format_kode)) $lama_sewa = 1;
+        else $lama_sewa = 3;
+        $sql = "INSERT INTO tbl_keranjang (id_jasa, lama_sewa) VALUES ('$id_jasa', '$lama_sewa')";
+        $conn->query($sql);
+        echo "<script>location.href='../index.php#jasa'</script>";
+    }
+}
+
+if (isset($_POST["hapus_keranjang"])) {
+    $id_jasa = $conn->real_escape_string($_POST["id_jasa"]);
+    $sql = "DELETE FROM tbl_keranjang WHERE id_jasa = '$id_jasa'";
+    $result = $conn->query($sql);
+    echo "<script>location.href='../keranjang.php'</script>";
 }

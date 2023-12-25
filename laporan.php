@@ -2,6 +2,7 @@
 $data = [
     "judul" => "Laporan",
     "penanda_beranda" => "",
+    "penanda_keranjang" => "",
     "penanda_tambah_jasa" => "",
     "penanda_pengembalian" => "",
     "penanda_laporan" => "active",

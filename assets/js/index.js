@@ -20,6 +20,30 @@ function formatTanggal(tanggal) {
   return day + "-" + month + "-" + year;
 }
 
+function tampilTotalKeranjang() {
+  let hargaInput = $(".detail-jasa").find(".harga");
+  let lamaSewaInput = $(".atur-lama-sewa").find(".input-lama-sewa");
+  let harga = [];
+  let lamaSewa = [];
+  hargaInput.each(function (index, element) {
+    harga.push(element.value);
+  });
+
+  lamaSewaInput.each(function (index, element) {
+    lamaSewa.push(element.value);
+  });
+
+  let tampilHarga = 0;
+  for (let i = 0; i < harga.length; i++) {
+    let counter = 0;
+    for (let j = 0; j < lamaSewa[i]; j += 3) {
+      counter++;
+    }
+    tampilHarga += harga[i] * counter;
+  }
+  return tampilHarga;
+}
+
 $(function () {
   new DataTable("#example");
   new DataTable("#example2");
@@ -202,5 +226,39 @@ $(function () {
     $(".form-tanggal-awal").val("");
     $(".form-tanggal-akhir").val("");
     $(".alert-warning-periode").addClass("d-none");
+  });
+
+  //logic untuk total di keranjang start
+  $("#total").text(rupiah(tampilTotalKeranjang()));
+  //logic untuk total di keranjang end
+
+  $(document).on("click", ".btn-kurang", function () {
+    const idJasa = $(this).data("idjasa");
+    if ($(`#${idJasa}`).val() == 3) {
+      alert("Lama Sewa Berada Pada Nilai Minimum!");
+    } else {
+      $.ajax({
+        url: `utils/up_lama_sewa.php?idjasa=${idJasa}&aksi=0`,
+        method: "post",
+        dataType: "json",
+        success: function (data) {
+          $(`#${idJasa}`).val(data);
+          $("#total").text(rupiah(tampilTotalKeranjang()));
+        },
+      });
+    }
+  });
+
+  $(document).on("click", ".btn-tambah", function () {
+    const idJasa = $(this).data("idjasa");
+    $.ajax({
+      url: `utils/up_lama_sewa.php?idjasa=${idJasa}&aksi=1`,
+      method: "post",
+      dataType: "json",
+      success: function (data) {
+        $(`#${idJasa}`).val(data);
+        $("#total").text(rupiah(tampilTotalKeranjang()));
+      },
+    });
   });
 });
