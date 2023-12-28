@@ -41,7 +41,6 @@ include_once("templates/header.php");
                         </thead>
                         <tbody>
                             <?php
-                            // $sql = "SELECT DISTINCT tbl_penyewaan.id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, metode_bayar FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id ORDER BY tanggal_transaksi DESC";
                             $sql = "SELECT DISTINCT tbl_penyewaan.id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, metode_bayar FROM tbl_penyewaan INNER JOIN tbl_detail_penyewaan ON tbl_penyewaan.id = tbl_detail_penyewaan.id WHERE tbl_detail_penyewaan.status_sewa IN('Belum Dikembalikan', 'Tidak Ada Peminjaman') ORDER BY tanggal_transaksi DESC";
                             $result = $conn->query($sql);
                             while ($row = $result->fetch_assoc()) {
@@ -60,41 +59,26 @@ include_once("templates/header.php");
                             ?>
                         </tbody>
                     </table>
-                    <div class="mt-4 text-end">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formCetak">Cetak Laporan</button>
-                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="nav-laporan" role="tabpanel" aria-labelledby="nav-laporan-tab" tabindex="0">
-                <div class="p-4">
-                    <h1 class="text-center">Laporan Penyewaan</h1>
+                <div class="p-4 d-flex align-items-center flex-column">
+                    <div class="col">
+                        <h1 class="text-center">Form Periode Laporan Penyewaan</h1>
+                    </div>
+                    <div class="col-4 m-4 border rounded p-4">
+                        <div class="alert alert-warning alert-warning-periode d-none" role="alert"></div>
+                        <div class="mb-3">
+                            <label for="tanggalAwal">Tanggal Awal</label>
+                            <input type="date" name="tanggalAwal" class="form-control form-tanggal-awal">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggalAkhir">Tanggal Akhir</label>
+                            <input type="date" name="tanggalAkhir" class="form-control form-tanggal-akhir">
+                        </div>
+                        <a href="" target="_blank" class="btn btn-primary btn-cetak-laporan">Cetak</a>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="formCetak" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Periode Laporan</h1>
-                <button type="button" class="btn-close btn-close-periode" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-warning alert-warning-periode d-none" role="alert"></div>
-                <div class="mb-3">
-                    <label for="tanggalAwal">Tanggal Awal</label>
-                    <input type="date" name="tanggalAwal" class="form-control form-tanggal-awal">
-                </div>
-                <div class="mb-3">
-                    <label for="tanggalAkhir">Tanggal Akhir</label>
-                    <input type="date" name="tanggalAkhir" class="form-control form-tanggal-akhir">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href="" target="_blank" class="btn btn-primary btn-cetak-laporan">Cetak</a>
-                <button type="button" class="btn btn-secondary btn-close-periode" data-bs-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>
