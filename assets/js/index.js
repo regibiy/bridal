@@ -1,3 +1,5 @@
+const HASNOLAMASEWA = ["RP", "RW", "FG"];
+
 function alertQty() {
   alert("Stok Tidak Tersedia!");
 }
@@ -44,9 +46,199 @@ function tampilTotalKeranjang() {
   return tampilHarga;
 }
 
+function alertPengembalian() {
+  $pesan = "Apakah Anda yakin untuk menyelesaikan penyewaan?";
+  if (confirm($pesan) == true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function generateTableDetailJasa(data) {
+  $(".modal-body-detail").html(null);
+  let table = $("<table class='table table-bordered'></table>");
+  let tRow = $("<tr></tr>");
+  let tHeadGambar = $("<th>Gambar Jasa</th>");
+  let tHeadKodeJasa = $("<th>Kode Jasa</th>");
+  let tHeadLamaSewa = $("<th>Lama Sewa</th>");
+  let tHeadHargaSewa = $("<th>Harga Sewa</th>");
+  let tHeadStatus = $("<th>Status Sewa</th>");
+  let tHeadTanggalKembali = $("<th>Tanggal Kembali</th>");
+  tRow
+    .append(tHeadGambar)
+    .append(tHeadKodeJasa)
+    .append(tHeadLamaSewa)
+    .append(tHeadHargaSewa)
+    .append(tHeadStatus)
+    .append(tHeadTanggalKembali);
+  table.append(tRow);
+  $(".modal-body-detail").append(table);
+  data.forEach((element) => {
+    let ket_jasa = null;
+    if (element.nama_detail_jasa == null) ket_jasa = element.nama_jasa;
+    else ket_jasa = element.nama_detail_jasa;
+    let tRow = $("<tr></tr>");
+    let tDataGambar = $(
+      `<td><img src='assets/upload_img/${element.gambar}' class='img-thumbnail' width='150'/></td>`
+    );
+    let tDataKodeJasa = $(`<td>${ket_jasa} ${element.kode_jasa}</td>`);
+    let lamaSewa = `${element.lama_sewa} Hari`;
+    if (HASNOLAMASEWA.includes(element.kode_jasa.substring(0, 2))) {
+      lamaSewa = "Tidak Ada";
+    }
+    let tDataLamaSewa = $(`<td>${lamaSewa}</td>`);
+    let counter = 0;
+    for (let i = 0; i < element.lama_sewa; i += 3) {
+      counter++;
+    }
+    let tampilHarga = element.harga_sewa * counter;
+    let tDataHargaSewa = $(`<td>${rupiah(tampilHarga)}</td>`);
+    let tDataStatus = $(`<td>${element.status_sewa}</td>`);
+    let tDataTanggalKembali = $(`<td>
+      ${
+        element.tanggal_dikembalikan == null
+          ? element.tanggal_dikembalikan
+          : formatTanggal(element.tanggal_dikembalikan)
+      }</td>`);
+    tRow
+      .append(tDataGambar)
+      .append(tDataKodeJasa)
+      .append(tDataLamaSewa)
+      .append(tDataHargaSewa)
+      .append(tDataStatus)
+      .append(tDataTanggalKembali);
+    table.append(tRow);
+  });
+}
+
+function generateTableListJasa(data) {
+  $(".modal-body-detail").html(null);
+  let table = $("<table class='table table-bordered'></table>");
+  let tRow = $("<tr></tr>");
+  let tHeadGambar = $("<th>Gambar Jasa</th>");
+  let tHeadKodeJasa = $("<th>Kode Jasa</th>");
+  let tHeadLamaSewa = $("<th>Lama Sewa</th>");
+  let tHeadHargaSewa = $("<th>Harga Sewa</th>");
+  let tHeadStatus = $("<th>Status Sewa</th>");
+  let tHeadTanggalKembali = $("<th>Tanggal Kembali</th>");
+  let tHeadAksi = $("<th>Aksi</th>");
+  tRow
+    .append(tHeadGambar)
+    .append(tHeadKodeJasa)
+    .append(tHeadLamaSewa)
+    .append(tHeadHargaSewa)
+    .append(tHeadStatus)
+    .append(tHeadTanggalKembali)
+    .append(tHeadAksi);
+  table.append(tRow);
+  $(".modal-body-detail").append(table);
+  data.forEach((element) => {
+    let ket_jasa = null;
+    if (element.nama_detail_jasa == null) ket_jasa = element.nama_jasa;
+    else ket_jasa = element.nama_detail_jasa;
+    let tRow = $("<tr></tr>");
+    let tDataGambar = $(
+      `<td><img src='assets/upload_img/${element.gambar}' class='img-thumbnail' width='150'/></td>`
+    );
+    let tDataKodeJasa = $(`<td>${ket_jasa} ${element.kode_jasa}</td>`);
+    let lamaSewa = `${element.lama_sewa} Hari`;
+    let aksi = true;
+    if (HASNOLAMASEWA.includes(element.kode_jasa.substring(0, 2))) {
+      lamaSewa = "Tidak Ada";
+      aksi = false;
+    }
+    let tDataLamaSewa = $(`<td>${lamaSewa}</td>`);
+    let counter = 0;
+    for (let i = 0; i < element.lama_sewa; i += 3) {
+      counter++;
+    }
+    let tampilHarga = element.harga_sewa * counter;
+    let tDataHargaSewa = $(`<td>${rupiah(tampilHarga)}</td>`);
+    let tDataStatus = $(`<td>${element.status_sewa}</td>`);
+    let tDataTanggalKembali = $(
+      `<td>${
+        element.tanggal_dikembalikan == null
+          ? element.tanggal_dikembalikan
+          : formatTanggal(element.tanggal_dikembalikan)
+      }</td>`
+    );
+    let tDataAksi = $(
+      aksi
+        ? `<td><button type='button' class='btn btn-primary btn-dikembalikan' style='background-color:var(--bs-primary);color:var(--bs-light);' data-idtrans='${element.id_transaksi}' data-kodejasa='${element.kode_jasa}'>Dikembalikan</button></td>`
+        : `<td>Tidak Memerlukan Aksi</td>`
+    );
+    tRow
+      .append(tDataGambar)
+      .append(tDataKodeJasa)
+      .append(tDataLamaSewa)
+      .append(tDataHargaSewa)
+      .append(tDataStatus)
+      .append(tDataTanggalKembali)
+      .append(tDataAksi);
+    table.append(tRow);
+  });
+}
+
+function generateTablePengembalian(data) {
+  $("#regenerateTable").html(null);
+  let table = $(
+    "<table id='example' class='table table-striped table-bordered' style='width:100%'></table>"
+  );
+  let tHead = $("<thead></thead>");
+  let tRowHead = $("<tr></tr>");
+  let tHeadNoTrans = $("<th>No. Transaksi</th>");
+  let tHeadTglTrans = $("<th>Tanggal Transaksi</th>");
+  let tHeadDataPenyewa = $("<th>Data Penyewa</th>");
+  let tHeadTglSewa = $("<th>Tanggal Sewa</th>");
+  let tHeadMetBay = $("<th>Metode Bayar</th>");
+  let tHeadAksi = $("<th>Aksi</th>");
+  tRowHead
+    .append(tHeadNoTrans)
+    .append(tHeadTglTrans)
+    .append(tHeadDataPenyewa)
+    .append(tHeadTglSewa)
+    .append(tHeadMetBay)
+    .append(tHeadAksi);
+  tHead.append(tRowHead);
+  table.append(tHead);
+  let tBody = $("<tbody></tbody>");
+  data.forEach((element) => {
+    let tRowBody = $("<tr></tr>");
+    let tDataNoTrans = $(`<td>${element.id}</td>`);
+    let tDataTglTrans = $(
+      `<td>${formatTanggal(element.tanggal_transaksi)}</td>`
+    );
+    let tDataPenyewa = $(
+      `<td>${element.nama} | ${element.alamat} | ${element.no_hp}</td>`
+    );
+    let tDataTglSewa = $(`<td>${formatTanggal(element.tanggal_sewa)}</td>`);
+    let tDataMetBay = $(`<td>${element.metode_bayar}</td>`);
+    let tDataAksi = $(
+      `<td><button class='btn btn-primary btn-sewa-detail' data-bs-toggle='modal' data-bs-target='#detail' data-id='${element.id}'>Detail</button></td>`
+    );
+    tRowBody
+      .append(tDataNoTrans)
+      .append(tDataTglTrans)
+      .append(tDataPenyewa)
+      .append(tDataTglSewa)
+      .append(tDataMetBay)
+      .append(tDataAksi);
+    tBody.append(tRowBody);
+  });
+  table.append(tBody);
+  $("#regenerateTable").html(table);
+  new DataTable("#example");
+}
+
 $(function () {
   new DataTable("#example");
   new DataTable("#example2");
+
+  $(document).on("keypress", "#noHp", function (e) {
+    const isValid = /\d/.test(String.fromCharCode(e.which));
+    if (!isValid) e.preventDefault();
+  });
 
   $(document).on("change", "#tipeJasa", function () {
     $("#detailJasa").remove();
@@ -54,7 +246,7 @@ $(function () {
     const id = $(this).val();
     $.ajax({
       url: `utils/get_det_jasa.php?id=${id}`,
-      method: "post",
+      method: "get",
       dataType: "json",
       success: function (data) {
         if (id == 1) {
@@ -142,7 +334,7 @@ $(function () {
     const id = $(this).data("id");
     $.ajax({
       url: `utils/get_jasa.php?id=${id}`,
-      method: "post",
+      method: "get",
       dataType: "json",
       success: function (data) {
         $(".modal-title-gambar").text(data[0].id);
@@ -153,66 +345,61 @@ $(function () {
       },
     });
   });
-  //WARNINGGGG
+
   $(document).on("click", ".btn-sewa-detail", function () {
     const id = $(this).data("id");
     $("#detailListJasa").text(`Daftar Jasa Pada Nomor Transaksi ${id}`);
     $.ajax({
       url: `utils/get_det_sewa.php?id=${id}`,
-      method: "post",
+      method: "get",
       dataType: "json",
       success: function (data) {
-        $(".modal-body-detail").html(null);
-        let table = $("<table class='table table-bordered'></table>");
-        let tRow = $("<tr></tr>");
-        let tHeadGambar = $("<th>Gambar Jasa</th>");
-        let tHeadKodeJasa = $("<th>Kode Jasa</th>");
-        let tHeadLamaSewa = $("<th>Lama Sewa</th>");
-        let tHeadHargaSewa = $("<th>Harga Sewa</th>");
-        let tHeadStatus = $("<th>Status Sewa</th>");
-        let tHeadTanggalKembali = $("<th>Tanggal Kembali</th>");
-        let tHeadAksi = $("<th>Aksi</th>");
-        tRow
-          .append(tHeadGambar)
-          .append(tHeadKodeJasa)
-          .append(tHeadLamaSewa)
-          .append(tHeadHargaSewa)
-          .append(tHeadStatus)
-          .append(tHeadTanggalKembali)
-          .append(tHeadAksi);
-        table.append(tRow);
-        $(".modal-body-detail").append(table);
-        data.forEach((element) => {
-          let tRow = $("<tr></tr>");
-          let tDataGambar = $(
-            `<td><img src='assets/upload_img/${element.gambar}' class='img-thumbnail' width='150'/></td>`
-          );
-          let tDataKodeJasa = $(`<td>${element.kode_jasa}</td>`);
-          let tDataLamaSewa = $(`<td>${element.lama_sewa} Hari</td>`);
-          let tDataHargaSewa = $(
-            `<td>${rupiah(parseInt(element.harga_sewa))}</td>`
-          );
-          let tDataStatus = $(`<td>${element.status_sewa}</td>`);
-          let tDataTanggalKembali = $(
-            `<td>${element.tanggal_dikembalikan}</td>`
-          );
-          let tDataAksi = $("<td></td>");
-          let btn = $(
-            "<button type='button' class='btn btn-primary' style='background-color:#0069D9;color:#fff;'>Dikembalikan</button>"
-          );
-          tDataAksi.append(btn);
-          tRow
-            .append(tDataGambar)
-            .append(tDataKodeJasa)
-            .append(tDataLamaSewa)
-            .append(tDataHargaSewa)
-            .append(tDataStatus)
-            .append(tDataTanggalKembali)
-            .append(tDataAksi);
-          table.append(tRow);
-        });
+        generateTableListJasa(data);
       },
     });
+  });
+
+  $(document).on("click", ".btn-sewa-detail-laporan", function () {
+    const id = $(this).data("id");
+    $("#detailListJasa").text(`Daftar Jasa Pada Nomor Transaksi ${id}`);
+    $.ajax({
+      url: `utils/get_det_sewa_laporan.php?id=${id}`,
+      method: "get",
+      dataType: "json",
+      success: function (data) {
+        generateTableDetailJasa(data);
+      },
+    });
+  });
+
+  $(document).on("click", ".btn-dikembalikan", function () {
+    const id = $(this).data("idtrans");
+    const kodeJasa = $(this).data("kodejasa");
+    if (alertPengembalian()) {
+      $.ajax({
+        url: `utils/up_balik_sewa.php?idtrans=${id}&kodejasa=${kodeJasa}`,
+        method: "post",
+        success: function () {
+          $.ajax({
+            url: `utils/get_det_sewa.php?id=${id}`,
+            method: "get",
+            dataType: "json",
+            success: function (data) {
+              alert("Berhasil Menyelesaikan Penyewaan Jasa!");
+              generateTableListJasa(data);
+              $.ajax({
+                url: `utils/get_pengembalian.php`,
+                method: "get",
+                dataType: "json",
+                success: function (data) {
+                  generateTablePengembalian(data);
+                },
+              });
+            },
+          });
+        },
+      });
+    }
   });
 
   $(document).on("click", ".btn-update-status", function () {

@@ -12,7 +12,10 @@ $data = [
 include_once("core/aksi.php");
 if (!login_admin()) header("Location: login.php");
 
-$sql = "SELECT * FROM tbl_keranjang INNER JOIN tbl_jasa ON tbl_keranjang.id_jasa = tbl_jasa.id";
+$sql = "SELECT tbl_keranjang.id_jasa, lama_sewa, qty, harga, gambar, nama_jasa, nama_detail_jasa  
+        FROM tbl_keranjang INNER JOIN tbl_jasa ON tbl_keranjang.id_jasa = tbl_jasa.id
+        LEFT JOIN tbl_jenis_jasa ON tbl_jasa.id_jenis_jasa = tbl_jenis_jasa.id
+        LEFT JOIN tbl_detail_jasa ON tbl_jasa.id_detail_jasa = tbl_detail_jasa.id";
 $result = $conn->query($sql);
 
 include_once("templates/header.php");
@@ -26,6 +29,8 @@ include_once("templates/header.php");
         $format_kode = ["RP", "RW", "FG"];
         $total = 0;
         while ($row = $result->fetch_assoc()) {
+            if (is_null($row['nama_detail_jasa'])) $ket_jasa = $row["nama_jasa"];
+            else $ket_jasa = $row["nama_detail_jasa"];
             echo "<div class='card mb-3'>";
             echo "<div class='card-body bg-body-tertiary shadow-sm'>";
             echo "<div class='row'>";
@@ -33,7 +38,7 @@ include_once("templates/header.php");
             echo "<img src='assets/upload_img/" . $row['gambar'] . "' class='img-thumbnail img-fluid'/>";
             echo "</div>";
             echo "<div class='col-8 detail-jasa'>";
-            echo "<p class='fw-bold'>" . $row["id_jasa"] . "</p>";
+            echo "<p class='fw-bold'>" . $ket_jasa . " " . $row["id_jasa"] . "</p>";
             echo "<p class='fw-bold'>" . rupiah($row["harga"]) . "</p>";
             echo "<input type='hidden' class='harga' value='" . $row["harga"] . "' />";
             $kode = substr($row["id_jasa"], 0, 2);
@@ -85,19 +90,19 @@ include_once("templates/header.php");
                     <div class="row mb-3">
                         <div class="col">
                             <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="name" name="nama" placeholder="Nama Penyewa" required>
+                            <input type="text" class="form-control" id="name" name="nama" placeholder="Nama Penyewa" minlength="3" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea name="alamat" id="alamat" class="form-control" placeholder="Alamat Penyewa" required></textarea>
+                            <textarea name="alamat" id="alamat" class="form-control" placeholder="Alamat Penyewa" minlength="5"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col">
                             <label for="noHp" class="form-label">No Handphone</label>
-                            <input type="number" id="noHp" name="no_hp" class="form-control" placeholder="Nomor HP Penyewa" required />
+                            <input type="text" id="noHp" name="no_hp" class="form-control" placeholder="Nomor HP Penyewa" minlength="10" required />
                         </div>
                         <div class="col">
                             <label for="tanggalSewa" class="form-label">Tanggal Sewa</label>

@@ -38,7 +38,7 @@ $count_keranjang = count_keranjang();
                         <a class="nav-link mx-2 fw-bold <?= $data["penanda_pengembalian"] ?>" href="pengembalian.php">Pengembalian</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mx-2 fw-bold <?= $data["penanda_laporan"] ?>" href="laporan.php">Laporan</a>
+                        <a class="nav-link mx-2 fw-bold <?= $data["penanda_laporan"] ?>" href="laporan.php">Faktur / Laporan</a>
                     </li>
                     <?php
                     if (login_admin()) {

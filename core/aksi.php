@@ -102,25 +102,29 @@ if (isset($_POST["tambah_sewa"])) {
     $sql = "SELECT * FROM tbl_keranjang INNER JOIN tbl_jasa ON tbl_keranjang.id_jasa = tbl_jasa.id";
     $result = $conn->query($sql);
     $multiple_query = "";
+    $format_kode = ["RP", "RW", "FG"];
     while ($row = $result->fetch_assoc()) {
         $kode_jasa = $row["id_jasa"];
         $lama_sewa = $row["lama_sewa"];
         $harga = $row["harga"];
-        $status_sewa = "Belum Dikembalikan";
+        $kode = substr($kode_jasa, 0, 2);
+        if (in_array($kode, $format_kode)) $status_sewa = "Tidak Ada Peminjaman";
+        else $status_sewa = "Belum Dikembalikan";
         $multiple_query .= "INSERT INTO tbl_detail_penyewaan (id, kode_jasa, lama_sewa, harga_sewa, status_sewa) VALUES ('$counter_final', '$kode_jasa', '$lama_sewa', '$harga', '$status_sewa');";
     }
 
-    $status_sewa = $conn->real_escape_string("Belum Dikembalikan");
     $sql = "INSERT INTO tbl_penyewaan (id, tanggal_transaksi, nama, alamat, no_hp, tanggal_sewa, metode_bayar) VALUES ('$counter_final', '$tanggal', '$nama', '$alamat', '$no_hp', '$tanggal_sewa', '$metode_bayar')";
     $conn->query($sql);
     if ($conn->affected_rows > 0) {
+        $conn->store_result();
         $conn->multi_query($multiple_query);
-        // clear basket after transaction ERROR
-        die;
+        while ($conn->next_result()) {
+            if (!$conn->more_results()) break;
+        }
         $conn->query("DELETE FROM tbl_keranjang");
-        // alert_with_redirect("Transaksi Penyewaan Berhasil!", "../laporan.php");
+        alert_with_redirect("Transaksi Penyewaan Berhasil!", "../laporan.php");
     } else {
-        // alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
+        alert_with_redirect("Transaksi Penyewaan Gagal!", "../index.php");
     }
 }
 

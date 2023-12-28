@@ -3,17 +3,9 @@ include_once("../core/aksi.php");
 
 $id = $_GET["id"];
 
-$sql = "SELECT *, tbl_penyewaan.id AS id_sewa FROM tbl_penyewaan LEFT JOIN tbl_detail_jasa ON tbl_penyewaan.nama_jasa = tbl_detail_jasa.id WHERE tbl_penyewaan.id = '$id'";
+$sql = "SELECT * FROM tbl_penyewaan WHERE id = '$id'";
 $result = $conn->query($sql);
 $data = $result->fetch_assoc();
-
-if (substr($data["kode_jasa"], 0, 2) == "DR") {
-    $nama_detail_jasa = "Dekorasi";
-} else if (substr($data["kode_jasa"], 0, 2) == "FG") {
-    $nama_detail_jasa = "Fotografer";
-} else {
-    $nama_detail_jasa = $data["nama_detail_jasa"];
-}
 
 require_once '../vendor/autoload.php';
 
@@ -31,7 +23,7 @@ $html = '
 <p style="margin-top:5px;margin-bottom:0;padding:0;">No.HP 082151566633</p>
 <hr>
 <h2 style="text-align:center;margin-top:12px;margin-bottom:0;">FAKTUR</h2>
-<p style="text-align:center;margin-top:0;margin-bottom:24px;">No. ' . $data["id_sewa"] . '</p>
+<p style="text-align:center;margin-top:0;margin-bottom:24px;">No. ' . $data["id"] . '</p>
 <table style="width:100%;margin-bottom:24px">
 <tr>
 <td style="width:50%;">Nama : <span style="font-weight:bold;">' . $data["nama"] . '</span></td>
@@ -49,19 +41,41 @@ $html = '
 <td class="table-style" style="font-weight:bold;padding:3px">Nama Jasa</td>
 <td class="table-style" style="font-weight:bold;">Lama Sewa</td>
 <td class="table-style" style="font-weight:bold;">Harga</td>
-</tr>
+<td class="table-style" style="font-weight:bold;">Total</td>
+</tr>';
+
+$sql2 = "SELECT * FROM tbl_detail_penyewaan 
+        INNER JOIN tbl_jasa ON tbl_detail_penyewaan.kode_jasa = tbl_jasa.id
+        LEFT JOIN tbl_jenis_jasa ON tbl_jasa.id_jenis_jasa = tbl_jenis_jasa.id
+        LEFT JOIN tbl_detail_jasa ON tbl_detail_jasa.id = tbl_jasa.id_detail_jasa
+        WHERE tbl_detail_penyewaan.id = '$id'";
+$result2 = $conn->query($sql2);
+$sub_total = 0;
+while ($row = $result2->fetch_assoc()) {
+    if (is_null($row['nama_detail_jasa'])) $ket_jasa = $row["nama_jasa"];
+    else $ket_jasa = $row["nama_detail_jasa"];
+    $counter = 0;
+    for ($i = 0; $i < $row["lama_sewa"]; $i += 3) {
+        $counter++;
+    }
+    $tampilHarga = $row["harga_sewa"] * $counter;
+    $sub_total += $tampilHarga;
+    $html .= '<tr>
+            <td class="table-style" style="padding:3px">' . $ket_jasa . ' ' . $row["kode_jasa"] . '</td>
+            <td class="table-style">' . $row["lama_sewa"] . ' Hari</td>
+            <td class="table-style">' . rupiah($row["harga_sewa"]) . '</td>
+            <td class="table-style">' . rupiah($tampilHarga) . '</td>
+            </tr>';
+}
+
+$html .= '
 <tr>
-<td class="table-style" style="padding:3px">' . $nama_detail_jasa . " " . $data["kode_jasa"] . '</td>
-<td class="table-style">' . $data["lama_sewa"] . ' Hari</td>
-<td class="table-style">' . rupiah($data["harga_sewa"]) . '</td>
-</tr>
-<tr>
-<td class="table-style" style="text-align:right;font-weight:bold;padding:3px" colspan="2">Sub Total</td>
-<td class="table-style" style="font-weight:bold;">' . rupiah($data["harga_sewa"] * $data["lama_sewa"]) . '</td>
+<td class="table-style" style="text-align:right;font-weight:bold;padding:3px" colspan="3">Sub Total</td>
+<td class="table-style" style="font-weight:bold;">' . rupiah($sub_total) . '</td>
 </tr>
 </table>
 <p style="text-align:center;margin:0;">Dicetak Oleh : <span style="font-weight:bold;">' . $_SESSION["username"] . '</span></p>
 <p style="text-align:center;margin:3px;">Dicetak Pada : <span style="font-weight:bold;">' . date('d-m-Y') . '</span></p>';
 $mpdf->WriteHTML($html);
 $file_name = "Faktur No. " . $data["id_sewa"] . ".pdf";
-$mpdf->Output($file_name, \Mpdf\Output\Destination::DOWNLOAD);
+$mpdf->Output($file_name, \Mpdf\Output\Destination::INLINE);
